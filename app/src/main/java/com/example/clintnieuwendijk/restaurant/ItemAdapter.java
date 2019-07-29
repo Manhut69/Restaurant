@@ -16,21 +16,27 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ItemAdapter extends ArrayAdapter<MenuItem> {
 
     ArrayList<MenuItem> items;
 
-    public ItemAdapter(Context context, int resource, ArrayList<MenuItem> items) {
+    // initialize adapter
+    ItemAdapter(Context context, int resource, ArrayList<MenuItem> items) {
         super(context, resource, items);
         this.items = items;
     }
 
+    // input the menu item info in adapter boxes
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             Log.d("It's", "Null");
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_item_adapter, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_item_adapter,
+                                                                    Objects.requireNonNull(parent),
+                                                        false);
         }
 
         MenuItem menuItem = items.get(position);

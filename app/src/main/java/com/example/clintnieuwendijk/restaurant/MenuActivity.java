@@ -1,19 +1,21 @@
+/*
+    An app to review the menu in a restaurant using adapters and requests
+    By Clint Nieuwendijk
+ */
+
 package com.example.clintnieuwendijk.restaurant;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class MenuActivity extends AppCompatActivity implements MenuRequest.Callback {
 
+    // request menu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,7 @@ public class MenuActivity extends AppCompatActivity implements MenuRequest.Callb
         x.getItems(this);
     }
 
+    // if request is successful, create menu
     @Override
     public void gotItems(ArrayList<MenuItem> categories) {
         ItemAdapter itemEntry = new ItemAdapter(this, R.layout.activity_item_adapter, categories);
@@ -29,6 +32,7 @@ public class MenuActivity extends AppCompatActivity implements MenuRequest.Callb
         lv.setAdapter(itemEntry);
     }
 
+    // if request failed, display error message
     @Override
     public void gotItemsError(String message) {
         Log.d("Oh no!", "Something went wrong fetching the menu");

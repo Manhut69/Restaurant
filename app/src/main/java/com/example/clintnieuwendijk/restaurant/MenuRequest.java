@@ -25,21 +25,28 @@ public class MenuRequest implements Response.Listener<JSONObject>, Response.Erro
         void gotItemsError(String message);
     }
 
-    public MenuRequest(Context context, String category) {
+    // initialize request
+    MenuRequest(Context context, String category) {
         this.context = context;
         this.category = category;
     }
 
+    //  unpack JSON response
     @Override
     public void onResponse(JSONObject response) {
-        JSONArray itemsJSONResponse = new JSONArray();
+        JSONArray itemsJSONResponse;
         ArrayList<MenuItem> items = new ArrayList<>();
         try {
             itemsJSONResponse = response.getJSONArray("items");
             for (int i = 0; i < itemsJSONResponse.length(); i++) {
                 JSONObject item = itemsJSONResponse.getJSONObject(i);
                 if (item.getString("category").equals(category)) {
-                    items.add(new MenuItem(item.getString("category"), item.getString("description"), item.getString("image_url"), item.getString("name"), item.getDouble("price"), item.getInt("id")));
+                    items.add(new MenuItem(item.getString("category"),
+                                           item.getString("description"),
+                                           item.getString("image_url"),
+                                           item.getString("name"),
+                                           item.getDouble("price"),
+                                           item.getInt("id")));
                 }
             }
         } catch (JSONException e) {
@@ -50,16 +57,18 @@ public class MenuRequest implements Response.Listener<JSONObject>, Response.Erro
         activity.gotItems(items);
     }
 
+    // return error if bad response
     @Override
     public void onErrorResponse(VolleyError error) {
         activity.gotItemsError(error.getMessage());
     }
 
-
-    public void getItems(Callback activity) {
+    // make request to server
+    void getItems(Callback activity) {
         this.activity = activity;
         RequestQueue queue = Volley.newRequestQueue(context);
-        JsonObjectRequest jsonRequest = new JsonObjectRequest("https://resto.mprog.nl/menu", null, this, this);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest("https://resto.mprog.nl/menu",
+                                                    null, this, this);
         queue.add(jsonRequest);
     }
 }
